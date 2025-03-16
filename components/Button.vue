@@ -5,7 +5,7 @@
 </template>
 <style scoped>
 .button{
-  @apply font-medium py-2 px-4 rounded transition-colors duration-300 cursor-pointer;
+  @apply font-medium py-2 px-4 rounded transition-colors duration-300 cursor-pointer w-fit;
   &.primary {
     @apply bg-yellow-300 text-gray-700 hover:bg-yellow-50 hover:text-gray-500; ;
   }

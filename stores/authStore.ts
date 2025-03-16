@@ -55,7 +55,9 @@ export const useAuthStore = defineStore('auth', () => {
   const signup = async (firstName: string, lastName: string, email: string, password: string, role = 'user') => {
     console.log('signup', firstName, lastName, email, password)
     try {
-      const { data: userData, error: userError } = await supabase.auth.signUp({ email, password })
+      const { data: userData, error: userError } = await supabase.auth.signUp({ email, password, options: {
+        emailRedirectTo: "http://localhost:3000/confirmation"
+      } })
       if (userError) throw userError
       user.value = userData.user
     } catch (error) {
