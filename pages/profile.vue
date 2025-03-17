@@ -9,6 +9,9 @@
   </div>
 </template>
 <script setup>
+definePageMeta({
+  middleware: 'protected'
+})
 const authStore = useAuthStore()
 const { user, profile } = storeToRefs(authStore)
 </script>
