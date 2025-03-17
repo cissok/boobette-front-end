@@ -124,10 +124,6 @@ export const useAuthStore = defineStore('auth', () => {
     }
   }
 
-  onMounted(() => {
-    restoreSession()
-  })
-
   return {
     user,
     profile,
@@ -138,5 +134,6 @@ export const useAuthStore = defineStore('auth', () => {
     updateProfile,
     updateUser,
     updatePassword,
+    restoreSession,
   }
 })

@@ -7,3 +7,7 @@
     <Footer />
   </div>
 </template>
+<script setup>
+const authStore = useAuthStore();
+await useAsyncData("auth", () => authStore.restoreSession());
+</script>
