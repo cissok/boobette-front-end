@@ -1,6 +1,9 @@
 export default defineNuxtRouteMiddleware(async (to, from) => {
   const authStore = useAuthStore()
   if (!authStore.user) {
-    await authStore.restoreSession()
+    try {
+      await authStore.restoreSession()
+    }
+    catch (error) {}
   }
 })

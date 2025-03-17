@@ -1,6 +1,7 @@
 <template>
   <div>
     <h1>Profile</h1>
+    <span v-if="profile?.role === 'admin'" class="">Admin</span>
     <div v-if="user && profile">
       <ProfileUpdateProfile />
       <ProfileUpdateEmail />
