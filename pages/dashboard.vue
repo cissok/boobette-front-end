@@ -5,4 +5,7 @@
   </div>
 </template>
 <script setup>
+definePageMeta({
+  middleware: 'protected'
+})
 </script>
