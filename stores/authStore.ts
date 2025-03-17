@@ -53,7 +53,6 @@ export const useAuthStore = defineStore('auth', () => {
   }
 
   const signup = async (firstName: string, lastName: string, email: string, password: string, role = 'user') => {
-    console.log('signup', firstName, lastName, email, password)
     try {
       const { data: userData, error: userError } = await supabase.auth.signUp({ email, password, options: {
         emailRedirectTo: "http://localhost:3000/confirmation"
@@ -62,6 +61,18 @@ export const useAuthStore = defineStore('auth', () => {
       user.value = userData.user
     } catch (error) {
       console.error('Signup failed:', error)
+      throw error
+    }
+  }
+
+  const resetPassword = async (email: string) => {
+    try {
+      const { error } = await supabase.auth.resetPasswordForEmail(email, {
+        redirectTo: 'http://localhost:3000/reset-password'
+      })
+      if (error) throw error
+    } catch (error) {
+      console.error('Password reset failed:', error)
       throw error
     }
   }
@@ -76,5 +87,6 @@ export const useAuthStore = defineStore('auth', () => {
     login,
     logout,
     signup,
+    resetPassword,
   }
 })

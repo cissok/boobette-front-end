@@ -6,6 +6,7 @@
       <input v-model="password" type="password" placeholder="Password" required />
       <button type="submit">Login</button>
     </form>
+    <NuxtLink to="/forgot-password">Forgot password?</NuxtLink>
   </div>
 </template>
 
