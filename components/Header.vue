@@ -22,6 +22,11 @@ const { user, profile } = storeToRefs(authStore)
           {{ profile.first_name }} {{ profile.last_name }}
         </div>
 
+        <!-- DASHBOARD -->
+        <NuxtLink to="/dashboard" class="ml-2" v-if="user">
+          <Button level="secondary">Dashboard</Button>
+        </NuxtLink>
+
         <!-- LOGIN/LOGOUT -->
         <NuxtLink v-if="!user" to="/login" class="ml-2">
           <Button level="secondary">Login</Button>

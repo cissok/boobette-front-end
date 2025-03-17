@@ -16,6 +16,7 @@ const handleResetPassword = async () => {
   try {
     await authStore.resetPassword(email.value)
     alert('Password reset email sent')
+    router.push('/login')
   } catch (error) {
     console.error('Password reset failed:', error)
   }

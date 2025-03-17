@@ -11,8 +11,8 @@
 </template>
 
 <script setup>
-const email = ref('jrcissokho@gmail.com')
-const password = ref('yourpassword1234')
+const email = ref('jrcissokho+001@gmail.com')
+const password = ref('lole1234')
 const authStore = useAuthStore()
 const router = useRouter()
 
