@@ -1,8 +1,14 @@
 <template>
   <div>
     <h1>Profile</h1>
-    <ProfileUpdateProfile />
-    <ProfileUpdateEmail />
-    <ProfileUpdatePassword />
+    <div v-if="user && profile">
+      <ProfileUpdateProfile />
+      <ProfileUpdateEmail />
+      <ProfileUpdatePassword />
+    </div>
   </div>
 </template>
+<script setup>
+const authStore = useAuthStore()
+const { user, profile } = storeToRefs(authStore)
+</script>

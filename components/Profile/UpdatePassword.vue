@@ -20,7 +20,7 @@ const password1 = ref(null)
 const password2 = ref(null)
 
 const isModified = computed(() => {
-  return password1.value === password2.value
+  return password1.value === password2.value && password1.value !== null
 })
 
 const updatePassword = async () => {
