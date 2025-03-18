@@ -8,7 +8,8 @@
         <div>Video: {{ course?.video_url }}</div>
       </div>
       <div class="w-1/4">
-        <Button level="primary" @click="purchaseCourse">Purchase</Button>
+        <Button v-if="isAlreadyPurchased" level="secondary" disabled>Already purchased</Button>
+        <Button v-else level="primary" @click="purchaseCourse">Purchase</Button>
       </div>
     </div>
     <div class="mt-10">
@@ -25,6 +26,7 @@ const coursesStore = useCoursesStore()
 const purchasesStore = usePurchasesStore()
 const authStore = useAuthStore()
 const { user } = storeToRefs(authStore)
+const { purchases } = storeToRefs(purchasesStore)
 
 const course = await coursesStore.fetchCourse(useRoute()?.params?.id)
 
@@ -46,4 +48,8 @@ const deleteCourse = async () => {
     console.error('Deleting course failed:', error)
   }
 }
+
+const isAlreadyPurchased = computed(() => {
+  return purchases.value.some(purchase => purchase.course_id === course?.id)
+})
 </script>

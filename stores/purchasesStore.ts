@@ -1,15 +1,17 @@
 export const usePurchasesStore = defineStore('purchases', () => {
   const supabase = useNuxtApp().$supabase
+  const purchases = ref(null)
 
-  const createPurchase = async (course_id: string, user_id: string, price: string) => {
+  const createPurchase = async (courseId: string, userId: string, price: string) => {
     try {
       const { data, error } = await supabase
         .from('purchases')
         .insert([
-          { user_id, course_id, price, status: 'pending' }
+          { 'user_id': userId,  'course_id': courseId, price, status: 'pending' }
         ])
         .select();
       if (error) throw error
+      await fetchPurchases(userId)
     }
     catch(error){
       console.error('Creating purchase failed:', error)
@@ -18,12 +20,12 @@ export const usePurchasesStore = defineStore('purchases', () => {
     
   }
 
-  const fetchPurchases = async (user_id: string) => {
+  const fetchPurchases = async (userId: string) => {
     try {
       const { data, error } = await supabase
         .from('purchases')
         .select('*, courses(title, description)')
-        .eq('user_id', user_id)
+        .eq('user_id', userId)
         // .eq('status', 'paid')
         .order('created_at', { ascending: false });
       if (error) {
@@ -31,7 +33,7 @@ export const usePurchasesStore = defineStore('purchases', () => {
         return null;
       }
       if (error) throw error
-      return data
+      purchases.value = data
     }
     catch(error){
       console.error('Creating account failed:', error)
@@ -41,6 +43,7 @@ export const usePurchasesStore = defineStore('purchases', () => {
 
   return {
     fetchPurchases,
-    createPurchase
+    createPurchase,
+    purchases,
   }
 })

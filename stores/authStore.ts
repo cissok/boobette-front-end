@@ -1,5 +1,8 @@
+import { usePurchasesStore } from './purchasesStore'
+
 export const useAuthStore = defineStore('auth', () => {
   const supabase = useNuxtApp().$supabase
+  const purchasesStore = usePurchasesStore()
   const user = ref(null)
   const profile = ref(null)
 
@@ -12,13 +15,7 @@ export const useAuthStore = defineStore('auth', () => {
       const authCookie = useCookie('auth', { path: '/' })
       authCookie.value = userData.session.access_token
 
-      const { data: profileData, error: profileError } = await supabase
-        .from('profiles')
-        .select('*')
-        .eq('id', userData.user.id)
-        .single()
-      if (profileError) throw profileError
-      profile.value = profileData
+      await fetchProfile(userData.user.id)
     } catch (error) {
       console.error('Login failed:', error)
       throw error
@@ -42,13 +39,7 @@ export const useAuthStore = defineStore('auth', () => {
       if (error) throw error
       user.value = data.user
 
-      const { data: profileData, error: profileError } = await supabase
-        .from('profiles')
-        .select('*')
-        .eq('id', data.user.id)
-        .single()
-      if (profileError) throw profileError
-      profile.value = profileData
+      await fetchProfile(data.user.id)
     }
   }
 
@@ -58,7 +49,6 @@ export const useAuthStore = defineStore('auth', () => {
         emailRedirectTo: "http://localhost:3000/confirmation"
       } })
       if (userError) throw userError
-      user.value = userData.user
     } catch (error) {
       console.error('Signup failed:', error)
       throw error
@@ -86,13 +76,7 @@ export const useAuthStore = defineStore('auth', () => {
         .eq('id', id)
         .single()
       if (error) throw error
-      const { data: profileData, error: profileError } = await supabase
-        .from('profiles')
-        .select('*')
-        .eq('id', id)
-        .single()
-      if (profileError) throw profileError
-      profile.value = profileData
+      await fetchProfile(id)
     }
     catch(error){
       console.error('Update profile failed:', error)
@@ -122,6 +106,18 @@ export const useAuthStore = defineStore('auth', () => {
       console.error('Update password failed:', error)
       throw error
     }
+  }
+
+  // FUNCTIONS
+  const fetchProfile = async (userId: string ) => {
+    const { data: profileData, error: profileError } = await supabase
+      .from('profiles')
+      .select('*')
+      .eq('id', userId)
+      .single()
+    if (profileError) throw profileError
+    profile.value = profileData
+    await purchasesStore.fetchPurchases(userId)
   }
 
   return {

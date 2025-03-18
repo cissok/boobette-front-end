@@ -16,5 +16,6 @@
 const authStore = useAuthStore()
 const { user } = storeToRefs(authStore)
 const purchasesStore = usePurchasesStore()
-const purchases = await purchasesStore.fetchPurchases(user.value?.id)
+const { purchases } = storeToRefs(purchasesStore)
+await purchasesStore.fetchPurchases(user.value?.id)
 </script>
