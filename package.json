@@ -13,6 +13,7 @@
     "@nuxtjs/tailwindcss": "^6.13.2",
     "@pinia/nuxt": "^0.10.1",
     "@supabase/supabase-js": "^2.49.1",
+    "date-fns": "^4.1.0",
     "nuxt": "^3.16.0",
     "pinia": "^3.0.1",
     "vue": "^3.5.13",

@@ -6,7 +6,10 @@
       <li v-for="purchase in purchases" :key="purchase?.id" class="border py-2 my-1 px-2">
         <NuxtLink :to="`/courses/${purchase.course_id}`" class="flex justify-between">
           <div>{{ purchase.courses.title }}</div>
-          <div>{{ purchase.created_at}}</div>
+          <div class="flex items-center">
+            <Date :date="purchase.created_at" class="mr-4" />
+            <div>{{ purchase.price }}€</div>
+          </div>
         </NuxtLink>
       </li>
     </ul>
