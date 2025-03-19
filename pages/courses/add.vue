@@ -3,10 +3,10 @@
     <h1>Add courses</h1>
     <div>
       <form @submit.prevent="addCourse" class="flex flex-col">
-        <input type="text" v-model="title" placeholder="Title" />
-        <input type="textArea" v-model="description" placeholder="Description" />
-        <input type="text" v-model="video" placeholder="Video url" />
-        <input type="number" v-model="price" step="0.01" min="0" max="9999" oninput="validity.valid||(value='');" placeholder="Price" />
+        <input type="text" v-model="title" placeholder="Title" required />
+        <input type="textArea" v-model="description" placeholder="Description" required />
+        <input type="text" v-model="video" placeholder="Video url" required />
+        <input type="number" v-model="price" step="0.01" min="0" max="9999" oninput="validity.valid||(value='');" placeholder="Price" required />
         <button type="submit">Add course</button>
       </form>
     </div>
