@@ -12,5 +12,6 @@
 </template>
 <script setup>
 const coursesStore = useCoursesStore()
-const courses = await coursesStore.fetchCourses()
+const { courses } = storeToRefs(coursesStore)
+await coursesStore.fetchCourses()
 </script>

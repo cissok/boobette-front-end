@@ -1,9 +1,8 @@
 export const useCoursesStore = defineStore('courses', () => {
   const supabase = useNuxtApp().$supabase
   const courses = ref(null)
-  // const profile = ref(null)
 
-  const addCourse = async (title: string, description: string, video_url: string, author_id: string) => {
+  const addCourse = async (title: string, description: string, video_url: string, author_id: string, price: number) => {
     try {
       const { data, error } = await supabase
         .from('courses')
@@ -12,6 +11,7 @@ export const useCoursesStore = defineStore('courses', () => {
           description,
           video_url,
           author_id,
+          price
         )
         .select()
       if (error) throw error
@@ -28,7 +28,7 @@ export const useCoursesStore = defineStore('courses', () => {
         .from('courses')
         .select()
       if (error) throw error
-      return data
+      courses.value = data
     }
     catch(error){
       console.error('Creating account failed:', error)
@@ -66,10 +66,33 @@ export const useCoursesStore = defineStore('courses', () => {
     }
   }
 
+  const updateCourse = async (courseId: string, title: string, description: string, video_url: string, author_id: string, price: number) => {
+    try {
+      const { error } = await supabase
+        .from('courses')
+        .update({
+          title,
+          description,
+          video_url,
+          author_id,
+          price
+        })
+        .eq('id', courseId)
+      if (error) throw error
+      await fetchCourses()
+    }
+    catch(error){
+      console.error('Updating account failed:', error)
+      throw error
+    }
+  }
+
   return {
     addCourse,
     fetchCourses,
     fetchCourse,
-    deleteCourse
+    deleteCourse,
+    updateCourse,
+    courses
   }
 })

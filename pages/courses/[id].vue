@@ -6,6 +6,8 @@
         <div>Title: {{ course?.title }}</div>
         <div>Description: {{ course?.description }}</div>
         <div>Video: {{ course?.video_url }}</div>
+        <div>Author: {{ course?.author_id }}</div>
+        <div>Price: {{ course?.price }}</div>
       </div>
       <div class="w-1/4">
         <Button v-if="isAlreadyPurchased" level="secondary" disabled>Already purchased</Button>
@@ -14,7 +16,10 @@
     </div>
     <div class="mt-10">
       <div>Admin panel</div>
-      <div>
+      <div class="flex">
+        <NuxtLink :to="'/courses/edit/' + course?.id" class="mr-2">
+          <Button level="secondary">Edit</Button>
+        </NuxtLink>
         <Button level="secondary" @click="deleteCourse">Del</Button>
       </div>
     </div>

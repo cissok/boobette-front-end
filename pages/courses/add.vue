@@ -6,6 +6,7 @@
         <input type="text" v-model="title" placeholder="Title" />
         <input type="textArea" v-model="description" placeholder="Description" />
         <input type="text" v-model="video" placeholder="Video url" />
+        <input type="number" v-model="price" step="0.01" min="0" max="9999" oninput="validity.valid||(value='');" placeholder="Price" />
         <button type="submit">Add course</button>
       </form>
     </div>
@@ -20,6 +21,7 @@ const coursesStore = useCoursesStore()
 const title = ref('')
 const description = ref('')
 const video = ref('')
+const price = ref(0)
 
 const addCourse = async () => {
   try {
@@ -27,7 +29,8 @@ const addCourse = async () => {
       title: title.value,
       description: description.value,
       video_url: video.value,
-      author_id: user.value?.id
+      author_id: user.value?.id,
+      price: price.value,
     })
     alert('Course added successfully')
     router.push('/courses')
