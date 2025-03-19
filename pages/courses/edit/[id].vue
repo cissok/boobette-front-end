@@ -16,7 +16,11 @@
       </div>
       <div>
         <label for="authorId">Author ID</label>
-        <input id="authorId" v-model="authorId" type="text" />
+        <select v-model="authorId">
+          <option v-for="author in authors" :key="author.id" :value="author.id">
+            {{ author.first_name }} {{ author.last_name }}
+          </option>
+        </select>
       </div>
       <div>
         <label for="price">Price</label>
@@ -39,6 +43,8 @@ const videoUrl = ref(course.video_url)
 const authorId = ref(course.author_id)
 const price = ref(course.price)
 
+const authors = await coursesStore.fetchAuthors()
+
 const editCourse = async () => {
   try {
     await coursesStore.updateCourse(
@@ -46,7 +52,7 @@ const editCourse = async () => {
       title.value,
       description.value,
       videoUrl.value,
-      course.author_id,
+      authorId.value,
       price.value
     )
     alert('Course updated successfully')

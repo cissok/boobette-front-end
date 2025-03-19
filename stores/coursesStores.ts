@@ -87,12 +87,38 @@ export const useCoursesStore = defineStore('courses', () => {
     }
   }
 
+  const fetchAuthors = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('courses')
+        .select()
+      if (error) throw error
+      const authorIds = data.reduce((acc: any[], course: any) => {
+        if (course.author_id && !acc.includes(course.author_id)) {
+          acc.push(course.author_id)
+        }
+        return acc
+      }, [])
+      const { data: profilesData, error: profilesError } = await supabase
+        .from('profiles')
+        .select('*')
+        .in('id', authorIds)
+      if (profilesError) throw profilesError
+      return profilesData
+    }
+    catch(error){
+      console.error('Fetch authors failed:', error)
+      throw error
+    }
+  }
+
   return {
     addCourse,
     fetchCourses,
     fetchCourse,
     deleteCourse,
     updateCourse,
+    fetchAuthors,
     courses
   }
 })
