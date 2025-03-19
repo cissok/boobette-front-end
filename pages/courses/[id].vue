@@ -37,7 +37,7 @@ const course = await coursesStore.fetchCourse(useRoute()?.params?.id)
 
 const purchaseCourse = async () => {
   try {
-    await purchasesStore.createPurchase(course?.id, user.value?.id, '0.00')
+    await purchasesStore.createPurchase(user.value?.id, course?.id, course?.price)
     alert('Course purchased successfully')
   } catch (error) {
     console.error('Purchasing course failed:', error)
