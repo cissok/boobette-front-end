@@ -3,11 +3,11 @@
     <form @submit.prevent="updatePassword">
       <div>
         <label for="password1" class="mr-2">Password:</label>
-        <input type="password" id="password1" v-model="password1" />
+        <input type="password" autocomplete="new-password" id="password1" v-model="password1" />
       </div>
       <div>
         <label for="password2" class="mr-2">Repeat password:</label>
-        <input type="password" id="password2" v-model="password2" />
+        <input type="password" autocomplete="new-password" id="password2" v-model="password2" />
       </div>
       <button :disabled="!isModified" type="submit">Save changes</button>
     </form>
