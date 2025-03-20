@@ -10,6 +10,8 @@
     "postinstall": "nuxt prepare"
   },
   "dependencies": {
+    "@heroicons/vue": "^2.2.0",
+    "@nuxt/image": "^1.10.0",
     "@nuxtjs/tailwindcss": "^6.13.2",
     "@pinia/nuxt": "^0.10.1",
     "@supabase/supabase-js": "^2.49.1",
