@@ -13,7 +13,7 @@ const { user, profile } = storeToRefs(authStore)
         </NuxtLink>
         
         <!-- SIGNUP -->
-        <NuxtLink to="/signup" class="ml-2" v-if="!user">
+        <NuxtLink to="/register" class="ml-2" v-if="!user">
           <Button level="primary">Create account</Button>
         </NuxtLink>
         
