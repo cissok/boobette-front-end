@@ -5,35 +5,42 @@
         <!-- LEFT -->
         <div class="hidden lg:block lg:w-1/2 bg-gray-400"></div>
         <!-- FORM -->
-        <div class="w-full lg:w-1/2 flex flex-col items-center justify-center px-6 sm:px-12 md:px-16 lg:px-18 py-6">
+        <div class="w-full lg:w-1/2 flex flex-col items-center justify-center px-6 sm:px-12 md:px-16 lg:px-18 py-6 h-3/5">
           <figure class="my-3">
             <img src="/assets/imgs/logo.png" alt="Logo" class="w-20 h-20 mx-auto" />
           </figure>
           <h1 class="text-center text-xl my-4 text-gray-400">Welcome to my plateform</h1>
-          <form @submit.prevent="handleLogin" class="pt-6 w-full">
+          <form @submit.prevent="submitForm" class="pt-6 w-full">
             <!-- EMAIL -->
             <div class="flex flex-col mb-4">
+              {{ v$.errors }}
               <label for="email" class="text-sm text-gray-400">Email</label>
-              <input v-model="email" id="email" type="email" required />
+              <input v-model="form.email" id="email" type="email" autocomplete="email"/>
+              <span v-if="v$.email.$error" class="text-red-500 text-sm mt-1">
+                {{ v$.email.$errors[0].$message }}
+              </span>
             </div>
             <!-- PASSWORD -->
             <div class="flex flex-col">
               <label for="password" class="text-sm text-gray-400">Password</label>
               <div class="relative flex items-center justify-center">
-                <input v-model="password" id="password" :type="passwordVisibliity ? 'text' : 'password'" required />
+                <input v-model="form.password" id="password" :type="passwordVisibility ? 'text' : 'password'" autocomplete="current-password" />
                 <div class="absolute right-0 cursor-pointer mr-1">
-                  <EyeSlashIcon v-if="passwordVisibliity" @click="passwordVisibliity = !passwordVisibliity" class="size-5 text-gray-400" />
-                  <EyeIcon v-else @click="passwordVisibliity = !passwordVisibliity" class="size-5 text-gray-400" />
+                  <EyeSlashIcon v-if="passwordVisibility" @click="passwordVisibility = !passwordVisibility" class="size-5 text-gray-400" />
+                  <EyeIcon v-else @click="passwordVisibility = !passwordVisibility" class="size-5 text-gray-400" />
                 </div>
               </div>
+              <span v-if="v$.password.$error" class="text-red-500 text-sm mt-1">
+                {{ v$.password.$errors[0].$message }}
+              </span>
             </div>
             <div class="w-full flex justify-end mt-2">
               <NuxtLink to="/forgot-password" class="text-sm text-gray-500">Forgot password?</NuxtLink>
             </div>
             <!-- ERRORS -->
-            <div class="mb-2">
-              <!-- <span class="text-red-500 text-sm">Incorrect credentials</span> -->
-              <!-- <span class="text-red-500 text-sm">Internal error</span> -->
+            <div v-if="errorForm" class="mb-2">
+              <span v-if="errorForm.code === 'invalid_credentials'" class="text-red-500 text-sm">Incorrect credentials !</span>
+              <span v-else class="text-red-500 text-sm">Internal error !</span>
             </div>
             <div class="w-full flex justify-center mt-4">
               <button class="button" type="submit">Sign in</button>
@@ -54,22 +61,40 @@
 </template>
 
 <script setup>
+import useVuelidate from '@vuelidate/core'
 import { EyeIcon, EyeSlashIcon } from '@heroicons/vue/24/solid'
-const email = ref('jrcissokho+001@gmail.com')
-const password = ref('lole1234')
+import { required, email, minLength, maxLength } from '@vuelidate/validators'
+
 const authStore = useAuthStore()
 const router = useRouter()
 
-const passwordVisibliity = ref(false)
+const errorForm = ref(null)
 
-const handleLogin = async () => {
+const form = ref({
+  email: '',
+  password: ''
+})
+
+const rules = computed(() => ({
+  email: { required, email },
+  password: { required, minLength: minLength(6), maxLength: maxLength(22) }
+}))
+
+const v$ = useVuelidate(rules, form)
+
+const submitForm = async () => {
+  const isValid = await v$.value.$validate()
+  if (!isValid) return
+
   try {
-    await authStore.login(email.value, password.value)
+    await authStore.login(form.value?.email, form.value?.password)
     router.push('/dashboard')
   } catch (error) {
-    console.error('Login failed:', error)
+    errorForm.value = error
   }
 }
+
+const passwordVisibility = ref(false)
 
 definePageMeta({
   layout: 'plain'

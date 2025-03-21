@@ -11,13 +11,10 @@ export const useAuthStore = defineStore('auth', () => {
       const { data: userData, error: userError } = await supabase.auth.signInWithPassword({ email, password })
       if (userError) throw userError
       user.value = userData.user
-
       const authCookie = useCookie('auth', { path: '/' })
       authCookie.value = userData.session.access_token
-
       await fetchProfile(userData.user.id)
-    } catch (error) {
-      console.error('Login failed:', error)
+    } catch (error) { 
       throw error
     }
   }
