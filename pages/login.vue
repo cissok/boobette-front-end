@@ -13,7 +13,6 @@
           <form @submit.prevent="submitForm" class="pt-6 w-full">
             <!-- EMAIL -->
             <div class="flex flex-col mb-4">
-              {{ v$.errors }}
               <label for="email" class="text-sm text-gray-400">Email</label>
               <input v-model="form.email" id="email" type="email" autocomplete="email"/>
               <span v-if="v$.email.$error" class="text-red-500 text-sm mt-1">
@@ -42,8 +41,9 @@
               <span v-if="errorForm.code === 'invalid_credentials'" class="text-red-500 text-sm">Incorrect credentials !</span>
               <span v-else class="text-red-500 text-sm">Internal error !</span>
             </div>
-            <div class="w-full flex justify-center mt-4">
-              <button class="button" type="submit">Sign in</button>
+            <div class="w-full flex justify-center items-center mt-4">
+              <button class="button" type="submit" :disabled="loadingForm">Sign in</button>
+              <Loader v-if="loadingForm" class="ml-4" />
             </div>
           </form>
           <div class="flex justify-center items-center my-6">
@@ -68,6 +68,7 @@ import { required, email, minLength, maxLength } from '@vuelidate/validators'
 const authStore = useAuthStore()
 const router = useRouter()
 
+const loadingForm = ref(false)
 const errorForm = ref(null)
 
 const form = ref({
@@ -83,15 +84,16 @@ const rules = computed(() => ({
 const v$ = useVuelidate(rules, form)
 
 const submitForm = async () => {
+  loadingForm.value = true
   const isValid = await v$.value.$validate()
   if (!isValid) return
-
   try {
     await authStore.login(form.value?.email, form.value?.password)
     router.push('/dashboard')
   } catch (error) {
     errorForm.value = error
   }
+  loadingForm.value = true
 }
 
 const passwordVisibility = ref(false)
@@ -100,6 +102,7 @@ definePageMeta({
   layout: 'plain'
 })
 </script>
+
 <style scoped>
 .wrapper{
   @apply w-full h-screen flex flex-col justify-center items-center bg-gray-300;
