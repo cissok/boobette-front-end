@@ -42,13 +42,16 @@ export const useAuthStore = defineStore('auth', () => {
 
   const signup = async (firstName: string, lastName: string, email: string, password: string, role = 'user') => {
     try {
-      const { data: userData ,error: userError } = await supabase.auth.signUp({
+      const { data: userData, error: userError } = await supabase.auth.signUp({
         email,
         password,
         options: {
           emailRedirectTo: "http://localhost:3000/confirmation"
         }
       })
+
+      if(userData?.user?.session == null) throw new Error("email_already_exists")
+
       if(userError) throw userError
       const { data: profileData, error: profileError } = await supabase
         .from('profiles')

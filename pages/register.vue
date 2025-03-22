@@ -59,6 +59,9 @@
             </div>
             <!-- ERRORS -->
             <div v-if="errorForm" class="mb-2">
+              <span v-if="errorForm.message === 'email_already_exists'" class="text-red-500 text-sm">
+                Email already in use, or need to be confirmed
+              </span>
               <span class="text-red-500 text-sm">Internal error !</span>
             </div>
             <div class="w-full flex justify-center items-center mt-4">
