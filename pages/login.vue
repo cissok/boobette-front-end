@@ -86,7 +86,10 @@ const v$ = useVuelidate(rules, form)
 const submitForm = async () => {
   loadingForm.value = true
   const isValid = await v$.value.$validate()
-  if (!isValid) return
+  if (!isValid) {
+    loadingForm.value = true
+    return
+  }
   try {
     await authStore.login(form.value?.email, form.value?.password)
     router.push('/dashboard')

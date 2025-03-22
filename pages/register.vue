@@ -128,7 +128,10 @@ const v$ = useVuelidate(rules, form)
 const submitForm = async () => {
   loadingForm.value = true
   const isValid = await v$.value.$validate()
-  if (!isValid) return
+  if (!isValid) {
+    loadingForm.value = false
+    return  
+  }
   try {
     await authStore.signup(form.value.firstName, form.value.lastName, form.value.email, form.value.password)
     registered.value = true
