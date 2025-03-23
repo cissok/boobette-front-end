@@ -2,8 +2,6 @@ export const useSubscriptionsStore = defineStore('subscriptions', () => {
   const authStore = useAuthStore()
 
   const subscribe = async () => {
-    console.log('STORE - subscribe()')
-
     try {
       const { data } = await useFetch('/api/stripe/checkout', {
         method: 'POST',

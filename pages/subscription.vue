@@ -10,7 +10,6 @@
 <script setup>
 const subscriptionsStore = useSubscriptionsStore()
 const subscribe = () => {
-  console.log('Subscribing...')
   subscriptionsStore.subscribe()
 }
 </script>

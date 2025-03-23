@@ -12,7 +12,6 @@
     <div class="flex flex-col mt-4">
       <NuxtLink class="underline" to="/profile">Profile</NuxtLink>
       <NuxtLink class="underline" to="/courses">Courses availables</NuxtLink>
-      <NuxtLink class="underline" to="/my-courses">My courses</NuxtLink>
     </div>
     <div class="flex flex-col mt-4">
       <h2>Admin</h2>
