@@ -1,8 +1,3 @@
-<script setup>
-const authStore = useAuthStore()
-const { user, profile } = storeToRefs(authStore)
-</script>
-
 <template>
   <div>
     <header class="shadow-md">
@@ -36,6 +31,11 @@ const { user, profile } = storeToRefs(authStore)
     </header>
   </div>
 </template>
+
+<script setup>
+const authStore = useAuthStore()
+const { user, profile } = storeToRefs(authStore)
+</script>
 
 <style scoped>
 </style>

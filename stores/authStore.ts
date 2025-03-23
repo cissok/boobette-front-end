@@ -1,8 +1,5 @@
-import { usePurchasesStore } from './purchasesStore'
-
 export const useAuthStore = defineStore('auth', () => {
   const supabase = useNuxtApp().$supabase
-  const purchasesStore = usePurchasesStore()
   const user = ref(null)
   const profile = ref(null)
 
@@ -55,7 +52,7 @@ export const useAuthStore = defineStore('auth', () => {
       if(userError) throw userError
       const { data: profileData, error: profileError } = await supabase
         .from('profiles')
-        .insert([{ 'id': userData.user.id, 'first_name': firstName, 'last_name': lastName, role }])
+        .insert([{ 'id': userData.user.id, 'email': email,'first_name': firstName, 'last_name': lastName, role }])
       if(profileError) throw profileError
     } catch (error) {
       throw error
@@ -124,7 +121,6 @@ export const useAuthStore = defineStore('auth', () => {
       .single()
     if (profileError) throw profileError
     profile.value = profileData
-    await purchasesStore.fetchPurchases(userId)
   }
 
   return {
