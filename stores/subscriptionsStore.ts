@@ -7,7 +7,7 @@ export const useSubscriptionsStore = defineStore('subscriptions', () => {
         method: 'POST',
         body: {
           priceId: 'price_1R5ct1CkAwCRcoziWNUTys4c', // ID du plan d'abonnement Stripe
-          userId: authStore.user?.email, // Utiliser l'email ou l'ID de Supabase
+          userEmail: authStore.user?.email, // Utiliser l'email ou l'ID de Supabase
         }
       });
     
