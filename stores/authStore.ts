@@ -1,7 +1,13 @@
 export const useAuthStore = defineStore('auth', () => {
   const supabase = useNuxtApp().$supabase
-  const user = ref(null)
-  const profile = ref(null)
+  const user = ref({
+    id: null,
+    firstName: null,
+    lastName: null,
+    email: null,
+    role: null,
+    isSubscribed: false
+  })
 
   const login = async (email: string, password: string) => {
     try {
@@ -10,7 +16,7 @@ export const useAuthStore = defineStore('auth', () => {
       user.value = userData.user
       const authCookie = useCookie('auth', { path: '/' })
       authCookie.value = userData.session.access_token
-      await fetchProfile(userData.user.id)
+      await fetchUser(userData.user.id)
     } catch (error) { 
       throw error
     }
@@ -21,8 +27,9 @@ export const useAuthStore = defineStore('auth', () => {
     if (error) throw error
     const authCookie = useCookie('auth', { path: '/' })
     authCookie.value = null
-    user.value = null
-    profile.value = null
+    resetUser()
+    // user.value = null
+    // profile.value = null
     navigateTo('/')
   }
 
@@ -33,7 +40,7 @@ export const useAuthStore = defineStore('auth', () => {
       if (error) throw error
       user.value = data.user
 
-      await fetchProfile(data.user.id)
+      await fetchUser(data.user.id)
     }
   }
 
@@ -74,13 +81,13 @@ export const useAuthStore = defineStore('auth', () => {
   const updateProfile = async (firstName: string, lastName: string) => {
     try {
       const { id } = user.value
-      const { data, error } = await supabase
+      const { error } = await supabase
         .from('profiles')
         .update({ 'first_name': firstName, 'last_name':lastName })
         .eq('id', id)
         .single()
       if (error) throw error
-      await fetchProfile(id)
+      await fetchUser(id)
     }
     catch(error){
       console.error('Update profile failed:', error)
@@ -113,19 +120,37 @@ export const useAuthStore = defineStore('auth', () => {
   }
 
   // FUNCTIONS
-  const fetchProfile = async (userId: string ) => {
+  const fetchUser = async (userId: string ) => {
     const { data: profileData, error: profileError } = await supabase
       .from('profiles')
       .select('*')
       .eq('id', userId)
       .single()
     if (profileError) throw profileError
-    profile.value = profileData
+    user.value = {
+      id: profileData.id,
+      firstName: profileData.first_name,
+      lastName: profileData.last_name,
+      email: profileData.email,
+      role: profileData.role,
+      isSubscribed: profileData.is_subscribed
+    }
+    // profile.value = profileData
+  }
+
+  const resetUser = () => {
+    user.value = {
+      id: null,
+      firstName: null,
+      lastName: null,
+      email: null,
+      role: null,
+      isSubscribed: false,
+    }
   }
 
   return {
     user,
-    profile,
     login,
     logout,
     signup,

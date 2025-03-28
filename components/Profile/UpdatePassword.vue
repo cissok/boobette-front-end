@@ -1,6 +1,10 @@
 <template>
   <div class="my-6">
     <form @submit.prevent="updatePassword">
+      <div class="hidden">
+        <label for="email-hidden" class="mr-2">Email:</label>
+        <input type="email" id="email-hidden" autocomplete="username" :value="authStore?.user?.email" readonly />
+      </div>
       <div>
         <label for="password1" class="mr-2">Password:</label>
         <input type="password" autocomplete="new-password" id="password1" v-model="password1" />

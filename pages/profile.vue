@@ -1,8 +1,8 @@
 <template>
   <div>
     <h1>Profile</h1>
-    <span v-if="profile?.role === 'admin'" class="">Admin</span>
-    <div v-if="user && profile">
+    <span v-if="user?.role === 'admin'" class="">Admin</span>
+    <div v-if="user?.id">
       <ProfileUpdateProfile />
       <ProfileUpdateEmail />
       <ProfileUpdatePassword />
@@ -14,5 +14,5 @@ definePageMeta({
   middleware: 'protected'
 })
 const authStore = useAuthStore()
-const { user, profile } = storeToRefs(authStore)
+const { user } = storeToRefs(authStore)
 </script>

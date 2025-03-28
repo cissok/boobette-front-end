@@ -2,7 +2,7 @@
   <div class="relative">
     <!-- SUBSCRIPTION -->
     <div class="absolute top-0 right-0 flex items-center flex-col">
-      <div v-if="!profile?.is_subscribed">
+      <div v-if="!user?.isSubscribed">
         <div class="text-red-500 border px-2 p-1 border-red-500 font-medium">Not subscribed</div>
       <NuxtLink class="underline" to="/subscription">Subscribe</NuxtLink>
       </div>
@@ -23,7 +23,6 @@
 definePageMeta({
   middleware: 'protected'
 })
-
 const authStore = useAuthStore()
-const { user, profile } = storeToRefs(authStore)
+const { user } = storeToRefs(authStore)
 </script>

@@ -15,13 +15,13 @@
 </template>
 <script setup>
 const authStore = useAuthStore()
-const { profile } = storeToRefs(authStore)
+const { user } = storeToRefs(authStore)
 
-const firstName = ref(profile.value?.first_name)
-const lastName = ref(profile.value?.last_name)
+const firstName = ref(user.value?.firstName)
+const lastName = ref(user.value?.lastName)
 
 const isModified = computed(() => {
-  return profile.value.first_name !== firstName.value || profile.value.last_name !== lastName.value
+  return user.value.firstName !== firstName.value || user.value.lastName !== lastName.value
 })
 
 const updateProfile = async () => {

@@ -8,22 +8,22 @@
         </NuxtLink>
         
         <!-- SIGNUP -->
-        <NuxtLink to="/register" class="ml-2" v-if="!user">
+        <NuxtLink to="/register" class="ml-2" v-if="!user?.id">
           <Button level="primary">Create account</Button>
         </NuxtLink>
         
         <!-- USER -->
-        <div v-if="profile" class="flex items-center">
-          {{ profile.first_name }} {{ profile.last_name }}
+        <div v-if="user?.id" class="flex items-center">
+          {{ user.firstName }} {{ user.lastName }}
         </div>
 
         <!-- DASHBOARD -->
-        <NuxtLink to="/dashboard" class="ml-2" v-if="user">
+        <NuxtLink v-if="user?.id" to="/dashboard" class="ml-2">
           <Button level="secondary">Dashboard</Button>
         </NuxtLink>
 
         <!-- LOGIN/LOGOUT -->
-        <NuxtLink v-if="!user" to="/login" class="ml-2">
+        <NuxtLink v-if="!user?.id" to="/login" class="ml-2">
           <Button level="secondary">Login</Button>
         </NuxtLink>
         <Button v-else level="secondary" @click="authStore.logout" class="ml-2">Logout</Button>
@@ -34,7 +34,7 @@
 
 <script setup>
 const authStore = useAuthStore()
-const { user, profile } = storeToRefs(authStore)
+const { user } = storeToRefs(authStore)
 </script>
 
 <style scoped>
