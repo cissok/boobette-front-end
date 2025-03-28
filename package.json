@@ -10,6 +10,7 @@
     "postinstall": "nuxt prepare"
   },
   "dependencies": {
+    "@aws-sdk/cloudfront-signer": "^3.775.0",
     "@heroicons/vue": "^2.2.0",
     "@nuxt/image": "^1.10.0",
     "@nuxtjs/tailwindcss": "^6.13.2",
