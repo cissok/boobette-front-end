@@ -26,7 +26,7 @@ export default defineEventHandler(async (event) => {
     const userEmail = session.customer_email;
     await supabase
       .from('profiles')
-      .update({ is_subscribed: true, subscription_id: session.subscription })
+      .update({ is_subscribed: true, subscription_id: session.subscription, subscription_status: 'active' })
       .eq('email', userEmail);
   }
 
@@ -36,7 +36,7 @@ export default defineEventHandler(async (event) => {
     const subscriptionId = invoice.subscription;
     await supabase
       .from('profiles')
-      .update({ is_subscribed: false })
+      .update({ is_subscribed: false, subscription_status: 'inactive' })
       .eq('subscription_id', subscriptionId);
   }
 
@@ -46,7 +46,7 @@ export default defineEventHandler(async (event) => {
     const subscriptionId = subscription.id;
     await supabase
       .from('profiles')
-      .update({ is_subscribed: false, subscription_id: null })
+      .update({ is_subscribed: false, subscription_id: null, subscription_status: 'inactive' })
       .eq('subscription_id', subscriptionId);
   }
 

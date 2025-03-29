@@ -44,7 +44,13 @@
             <!-- PASSWORD -->
             <div class="flex flex-col mb-4">
               <label for="password1" class="text-sm text-gray-400">Password</label>
-              <input v-model="form.password" id="password1" type="text" autocomplete="new-password" />
+              <div class="relative flex items-center justify-center">
+                <input v-model="form.password" id="password1" :type="passwordVisibility ? 'text' : 'password'" autocomplete="new-password" />
+                <div class="absolute right-0 cursor-pointer mr-1">
+                  <EyeSlashIcon v-if="passwordVisibility" @click="passwordVisibility = !passwordVisibility" class="size-5 text-gray-400" />
+                  <EyeIcon v-else @click="passwordVisibility = !passwordVisibility" class="size-5 text-gray-400" />
+                </div>
+              </div>
               <span v-if="v$.password.$error" class="text-red-500 text-sm mt-1">
                 {{ v$.password.$errors[0].$message }}
               </span>
@@ -52,7 +58,13 @@
             <!-- REPEAT PASSWORD -->
             <div class="flex flex-col mb-4">
               <label for="repeatPassword" class="text-sm text-gray-400">Repeat password</label>
-              <input v-model="form.repeatPassword" id="repeatPassword" type="text" autocomplete="new-password" />
+              <div class="relative flex items-center justify-center">
+                <input v-model="form.repeatPassword" id="repeatPassword" :type="passwordVisibility2 ? 'text' : 'password'" autocomplete="new-password" />
+                <div class="absolute right-0 cursor-pointer mr-1">
+                  <EyeSlashIcon v-if="passwordVisibility2" @click="passwordVisibility2 = !passwordVisibility" class="size-5 text-gray-400" />
+                  <EyeIcon v-else @click="passwordVisibility2 = !passwordVisibility2" class="size-5 text-gray-400" />
+                </div>
+              </div>
               <span v-if="v$.repeatPassword.$error" class="text-red-500 text-sm mt-1">
                 {{ v$.repeatPassword.$errors[0].$message }}
               </span>
@@ -62,7 +74,7 @@
               <span v-if="errorForm.message === 'email_already_exists'" class="text-red-500 text-sm">
                 Email already in use, or need to be confirmed
               </span>
-              <span class="text-red-500 text-sm">Internal error !</span>
+              <span v-else class="text-red-500 text-sm">Internal error !</span>
             </div>
             <div class="w-full flex justify-center items-center mt-4">
               <button class="button" type="submit" :disabled="loadingForm">Create Account</button>
@@ -87,6 +99,7 @@
 
 <script setup>
 import useVuelidate from '@vuelidate/core'
+import { EyeIcon, EyeSlashIcon } from '@heroicons/vue/24/solid'
 import { required, email, minLength, maxLength, sameAs, helpers } from '@vuelidate/validators'
 
 const authStore = useAuthStore()
@@ -94,6 +107,9 @@ const registered = ref(false)
 
 const loadingForm = ref(false)
 const errorForm = ref(null)
+
+const passwordVisibility = ref(false)
+const passwordVisibility2 = ref(false)
 
 const form = ref({
   firstName: '',

@@ -95,8 +95,8 @@ const submitForm = async () => {
     router.push('/dashboard')
   } catch (error) {
     errorForm.value = error
+    loadingForm.value = false
   }
-  loadingForm.value = true
 }
 
 const passwordVisibility = ref(false)
