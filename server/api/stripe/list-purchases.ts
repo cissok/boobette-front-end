@@ -9,7 +9,7 @@ export default defineEventHandler(async (event) => {
   if (!userEmail) throw createError({ statusCode: 400, statusMessage: 'User email is required'})
 
   try {
-    const customers = await stripe.customers.list({email: userEmail})
+    const customers = await stripe.customers.list({ email: userEmail as string })
     const customerId = customers.data?.[0]?.id
     if(!customerId) throw createError({ statusCode: 400, statusMessage: 'User not found in Stripe'})
     const charges = await stripe.charges.list({ customer: customerId })
