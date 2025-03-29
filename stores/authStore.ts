@@ -6,7 +6,9 @@ export const useAuthStore = defineStore('auth', () => {
     lastName: null,
     email: null,
     role: null,
-    isSubscribed: false
+    isSubscribed: false,
+    subscriptionId: null,
+    subscriptionStatus: null,
   })
 
   const login = async (email: string, password: string) => {
@@ -17,7 +19,7 @@ export const useAuthStore = defineStore('auth', () => {
       const authCookie = useCookie('auth', { path: '/' })
       authCookie.value = userData.session.access_token
       await fetchUser(userData.user.id)
-    } catch (error) { 
+    } catch (error) {
       throw error
     }
   }
@@ -36,11 +38,15 @@ export const useAuthStore = defineStore('auth', () => {
   const restoreSession = async () => {
     const token = useCookie('auth').value
     if (token) {
-      const { data, error } = await supabase.auth.getUser(token)
-      if (error) throw error
-      user.value = data.user
-
-      await fetchUser(data.user.id)
+      try {
+        const { data, error } = await supabase.auth.getUser(token)
+        if (error) throw error
+        user.value = data.user
+        await fetchUser(data.user.id)
+      }
+      catch (error) {
+        console.error('Error restoring session:', error)
+      }
     }
   }
 
@@ -55,8 +61,8 @@ export const useAuthStore = defineStore('auth', () => {
       })
 
       if(userData?.user?.session == null) throw new Error("email_already_exists")
-
-      if(userError) throw userError
+      
+        if(userError) throw userError
       const { data: profileData, error: profileError } = await supabase
         .from('profiles')
         .insert([{ 'id': userData.user.id, 'email': email,'first_name': firstName, 'last_name': lastName, role }])
@@ -133,7 +139,9 @@ export const useAuthStore = defineStore('auth', () => {
       lastName: profileData.last_name,
       email: profileData.email,
       role: profileData.role,
-      isSubscribed: profileData.is_subscribed
+      isSubscribed: profileData.is_subscribed,
+      subscriptionId: profileData.subscription_id,
+      subscriptionStatus: profileData.subscription_status,
     }
     // profile.value = profileData
   }
@@ -146,6 +154,8 @@ export const useAuthStore = defineStore('auth', () => {
       email: null,
       role: null,
       isSubscribed: false,
+      subscriptionId: null,
+      subscriptionStatus: null,
     }
   }
 
