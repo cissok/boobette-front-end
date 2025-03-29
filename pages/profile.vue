@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1>Profile</h1>
+    <h1 class="text-2xl font-medium">Profile</h1>
     <span v-if="user?.role === 'admin'" class="">Admin</span>
     <div v-if="user?.id">
       <ProfileUpdateProfile />

@@ -1,19 +1,16 @@
 export const useSubscriptionsStore = defineStore('subscriptions', () => {
   const authStore = useAuthStore()
 
-  const subscribe = async () => {
+  const subscribe = async (amountMonth: number) => {
     try {
-      const { data } = await useFetch('/api/stripe/checkout', {
+      const { url } = await $fetch('/api/stripe/checkout', {
         method: 'POST',
         body: {
-          priceId: 'price_1R5ct1CkAwCRcoziWNUTys4c', // ID du plan d'abonnement Stripe
-          userEmail: authStore.user?.email, // Utiliser l'email ou l'ID de Supabase
+          amountMonth,
+          userEmail: authStore.user?.email,
         }
-      });
-    
-      if (data.value?.url) {
-        window.location.href = data.value.url;
-      }
+      });   
+      if (url) window.location.href = url;
     }
     catch(error){
       console.error('Subcription account failed:', error)
